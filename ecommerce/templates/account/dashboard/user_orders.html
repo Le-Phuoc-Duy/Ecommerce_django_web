@@ -38,12 +38,12 @@
                 Tổng thanh toán: <span class="fw-bold">{{ order.total_paid|currency }}</span>
             </div>
         </div>
-        <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
+        <!-- <div class="col-md-5 col-lg-4 order-md-last p-0 order-3">
             <div class="d-grid gap-2" style="margin-left: 16px">
                 <button class="btn btn-warning" type="button">Phản ánh đơn hàng</button>
                 <button class="btn btn-light" type="button">Review đơn hàng</button>
             </div>
-        </div>
+        </div> -->
         <div class="col-md-7 col-lg-8 p-0 mr-3">
             {% for item in order.items.all %}
             <div class="card mb-3 border-0">

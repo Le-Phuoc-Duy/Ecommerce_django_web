@@ -9,8 +9,8 @@ from account.models import Address
 from basket.basket import Basket
 from orders.models import Order, OrderItem
 from .models import DeliveryOptions
-from paypalcheckoutsdk.orders import OrdersGetRequest
-from .paypal import PayPalClient
+# from paypalcheckoutsdk.orders import OrdersGetRequest
+# from .paypal import PayPalClient
 
 @login_required
 def delivery_choices(request):
@@ -40,7 +40,6 @@ def basket_update_delivery(request):
         response = JsonResponse({"total": updated_total_price, "delivery_price": delivery.delivery_price})
         return response
 
-
 @login_required
 def delivery_address(request):
     session = request.session
@@ -60,41 +59,56 @@ def delivery_address(request):
 
     return render(request, "checkout/delivery_address.html", {"addresses": addresses})
 
-
-####
-# Thanh toán bằng PayPal
-####
-
-
 @login_required
 def payment_complete(request):
-    PPClient = PayPalClient()
 
-    body = json.loads(request.body)
-    data = body["orderID"]
-    user_id = request.user.id
+    if request.method == 'POST':
+        user_id = request.user.id
 
-    requestOrder = OrdersGetRequest(data)
-    response = PPClient.client.execute(requestOrder)
+        basket = Basket(request) 
+        
+        # order_key = "OrderKeyDemo123" 
+        full_name = request.POST.get('full_name')
+        # email = "email@domain.com"
+        address1 = request.POST.get('address_line')
+        address2 = request.POST.get('address_line2')
+        postal_code = request.POST.get('postcode')
+        town_city = request.POST.get('town_city')
+        phone = request.POST.get('phone')
+        total_paid = request.POST.get('total').replace('$', '').replace(',', '') 
+    
+        print("full_name: ", full_name) 
+        print("address1: ", address1)
+        print("address2: ", address2)
+        print("postal_code: ", postal_code)
+        print("phone: ", phone)
+        print("total_paid: ", total_paid)
 
-    basket = Basket(request)
-    order = Order.objects.create(
-        user_id=user_id,
-        full_name=response.result.purchase_units[0].shipping.name.full_name,
-        email=response.result.payer.email_address,
-        address1=response.result.purchase_units[0].shipping.address.address_line_1,
-        address2=response.result.purchase_units[0].shipping.address.admin_area_2,
-        postal_code=response.result.purchase_units[0].shipping.address.postal_code,
-        country_code=response.result.purchase_units[0].shipping.address.country_code,
-        total_paid=response.result.purchase_units[0].amount.value,
-        order_key=response.result.id,
-        payment_option="paypal",
-        billing_status=True,
-    )
-    order_id = order.pk
-    for item in basket:
-        OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
-    return JsonResponse("Payment completed!", safe=False)
+        order = Order.objects.create(
+            user_id=user_id,
+            full_name=full_name,
+            # email=email,
+            address1=address1,
+            address2=address2,
+            postal_code=postal_code,
+            city = town_city,
+            # country_code=country_code,
+            phone=phone,
+            total_paid=total_paid,
+            # order_key=order_key,
+            # payment_option=payment_option,
+            billing_status=True,
+        )
+        order_id = order.pk
+        for item in basket:
+            OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
+        
+        # Xóa giỏ hàng sau khi thanh toán
+        basket.clear()
+
+        # return JsonResponse({"message": "Payment completed!", "orderID": order_id})
+        return render(request, "checkout/payment_successful.html", {})
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 @login_required
