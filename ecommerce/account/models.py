@@ -41,16 +41,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name = "Accounts"
-        verbose_name_plural = "Accounts"
-
-    # def email_user(self, subject, message):
-    #     send_mail(
-    #         subject,
-    #         message,
-    #         'daitoan2000@gmail.com',
-    #         [self.email],
-    #         fail_silently=False,
-    #     )
+        verbose_name_plural = "Accounts" 
 
     def __str__(self):
         return self.name
@@ -65,7 +56,6 @@ class Address(models.Model):
     address_line = models.CharField(_("Address Line 1"), max_length=255)
     address_line2 = models.CharField(_("Address Line 2"), max_length=255)
     town_city = models.CharField(_("Town/City/State"), max_length=150)
-    delivery_instructions = models.CharField(_("Delivery Instructions"), max_length=255)
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
     default = models.BooleanField(_("Default"), default=False)

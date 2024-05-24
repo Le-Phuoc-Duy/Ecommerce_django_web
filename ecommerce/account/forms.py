@@ -83,30 +83,8 @@ class RegistrationForm(forms.ModelForm):
         self.fields['password'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'Mật khẩu'})
         self.fields['password2'].widget.attrs.update(
-            {'class': 'form-control', 'placeholder': 'Xác nhận mật khẩu'})
-
-
-class PwdResetForm(PasswordResetForm):
-    email = forms.EmailField(max_length=254, widget=forms.TextInput(
-        attrs={'class': 'form-control mb-3', 'placeholder': 'Email', 'id': 'form-email'}))
-
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        u = Customer.objects.filter(email=email)
-        if not u:
-            raise forms.ValidationError('Rất tiếc, chúng tôi không thể tìm thấy địa chỉ email đó')
-        return email
-
-
-class PwdResetConfirmForm(SetPasswordForm):
-    new_password1 = forms.CharField(
-        label='New password', widget=forms.PasswordInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Mật khẩu mới', 'id': 'form-new-pass1'}))
-    new_password2 = forms.CharField(
-        label='Repeat password', widget=forms.PasswordInput(
-            attrs={'class': 'form-control mb-3', 'placeholder': 'Xác nhận mật khẩu mới', 'id': 'form-new-pass2'}))
-
-
+            {'class': 'form-control', 'placeholder': 'Xác nhận mật khẩu'}) 
+        
 class UserEditForm(forms.ModelForm):
     email = forms.EmailField(
         label='Email (không thể chỉnh sửa)', max_length=200,

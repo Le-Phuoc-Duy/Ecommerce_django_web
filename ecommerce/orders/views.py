@@ -8,16 +8,9 @@ from .models import Order, OrderItem
 
 def add(request):
     basket = Basket(request)
-    if request.POST.get('action') == 'post':
-
-        # order_key = request.POST.get('order_key')
+    if request.POST.get('action') == 'post': 
         user_id = request.user.id
-        total_paid = basket.get_total_price()
-
-        # Check if order exists
-        # if Order.objects.filter(order_key=order_key).exists():
-        #     pass
-        # else:
+        total_paid = basket.get_total_price() 
         order = Order.objects.create(user_id=user_id, full_name='name', address1='add1',
                                         address2='add2', total_paid=total_paid)
         order_id = order.pk
@@ -27,12 +20,7 @@ def add(request):
                                         quantity=item['qty'])
 
         response = JsonResponse({'success': 'Return something'})
-        return response
-
-
-# def payment_confirmation(data):
-#     Order.objects.filter(order_key=data).update(billing_status=True)
-
+        return response 
 
 def user_orders(request):
     user_id = request.user.id

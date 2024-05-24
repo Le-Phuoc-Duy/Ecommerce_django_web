@@ -9,8 +9,6 @@ from account.models import Address
 from basket.basket import Basket
 from orders.models import Order, OrderItem
 from .models import DeliveryOptions
-# from paypalcheckoutsdk.orders import OrdersGetRequest
-# from .paypal import PayPalClient
 
 @login_required
 def delivery_choices(request):

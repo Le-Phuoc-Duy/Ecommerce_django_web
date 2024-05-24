@@ -49,18 +49,18 @@ class DeliveryOptions(models.Model):
         return self.delivery_name
 
 
-class PaymentSelections(models.Model):
-    name = models.CharField(
-        verbose_name=_("name"),
-        help_text=_("Bắt buộc"),
-        max_length=255,
-    )
+# class PaymentSelections(models.Model):
+#     name = models.CharField(
+#         verbose_name=_("name"),
+#         help_text=_("Bắt buộc"),
+#         max_length=255,
+#     )
 
-    is_active = models.BooleanField(default=True)
+#     is_active = models.BooleanField(default=True)
 
-    class Meta:
-        verbose_name = _("Payment Selection")
-        verbose_name_plural = _("Payment Selections")
+#     class Meta:
+#         verbose_name = _("Payment Selection")
+#         verbose_name_plural = _("Payment Selections")
 
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name

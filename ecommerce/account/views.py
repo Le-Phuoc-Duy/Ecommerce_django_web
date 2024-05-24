@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -66,21 +65,7 @@ def account_register(request):
             user.set_password(registerForm.cleaned_data["password"])
             user.is_active = False
             user.save()
-            current_site = get_current_site(request)
-            subject = "Kích hoạt tài khoản của bạn thành công"
-            message = render_to_string(
-                "account/registration/account_activation_email.html",
-                {
-                    "user": user,
-                    "domain": current_site.domain,
-                    "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                    "token": account_activation_token.make_token(user),
-                },
-            )
-            # user.email_user(subject=subject, message=message)
             return account_activate(request, urlsafe_base64_encode(force_bytes(user.pk)), account_activation_token.make_token(user))
-            # return 
-            # return render(request, "account/registration/register_email_confirm.html", {"form": registerForm})
     else:
         registerForm = RegistrationForm()
     return render(request, "account/registration/register.html", {"form": registerForm})
@@ -162,7 +147,7 @@ def user_orders(request):
 
 def logout_view(request):
     logout(request)
-    response = redirect('account:login')  # Chuyển hướng đến trang đăng nhập sau khi đăng xuất
+    response = redirect('account:login')
     response.delete_cookie('csrftoken')  # Xóa cookie 1
     response.delete_cookie('sessionid')  # Xóa cookie 2
 

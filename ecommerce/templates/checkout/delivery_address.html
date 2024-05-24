@@ -40,10 +40,6 @@
                     <span id="total" class="fw-bold h5 text-danger">{{basket.get_total_price|currency}}</span>
                 </div>
             </div> 
-            <!-- <form id="payment-form" action="{% url 'checkout:payment_complete' %}" method="post">
-                {% csrf_token %}
-                <button type="submit">Thanh toán</button>
-            </form> -->
             <form id="payment-form" action="{% url 'checkout:payment_complete' %}" method="post">
                 {% csrf_token %}
                 {% for address in addresses %}
@@ -57,10 +53,8 @@
                         <input type="hidden" name="total" value="{{ basket.get_total_price|currency }}">
                     {% endif %}
                 {% endfor %} 
-                <button type="submit">Thanh toán</button>
+                <button type="submit" class="btn btn-success fw-bold w-100 mt-3">Thanh toán</button>
             </form>
-             
-            <!-- <div id="paypal-button-container" class="mt-2"></div> -->
         </div>
 
         <div class="col-md-7 col-lg-8">

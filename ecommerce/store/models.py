@@ -13,12 +13,6 @@ class Category(MPTTModel):
         unique=True,
     )
     slug = models.SlugField(verbose_name=_("Slug"), max_length=255, unique=True)
-    # image = models.ImageField(
-    #     verbose_name=_("Ảnh"),
-    #     help_text=_("Upload ảnh sản phẩm"),
-    #     upload_to="images/",
-    #     default="images/default.png",
-    # )
     parent = TreeForeignKey("self", verbose_name=_("Danh mục cha"), on_delete=models.CASCADE, null=True, blank=True, related_name="children")
     is_active = models.BooleanField(verbose_name=_("Trạng thái hoạt động"), default=True)
 
